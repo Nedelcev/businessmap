@@ -1,24 +1,30 @@
-<?php
+<?php
+
 /**
    _____   _   _          _      _      _                
   / ____| | \ | |        | |    | |    | |               
  | |  __  |  \| | ___  __| | ___| | ___| |__   _____   __
  | | |_ | | . ` |/ _ \/ _` |/ _ \ |/ __| '_ \ / _ \ \ / /
  | |__| |_| |\  |  __/ (_| |  __/ | (__| | | |  __/\ V / 
-  \_____(_)_| \_|\___|\__,_|\___|_|\___|_| |_|\___| \_/  
+  \_____(_)_| \_|\___|\__,_|\___|_|\___|_| |_|\___| \_/  
+
  * Coppyright 2024
  * Author: Georgi Nedelchev
  * Created date: 03-July-24
  * All rights reserved!
  */
  
-header("Content-Type: application/json");
+header("Content-Type: application/json");
+
 $request = $_SERVER['REQUEST_URI'];
 $request = rtrim($request, '/');
-$request = explode('/', $request);
-$method = $_SERVER['REQUEST_METHOD'];
+$request = explode('/', $request);
+
+$method = $_SERVER['REQUEST_METHOD'];
+
 require 'tasks.php';
-require 'tags.php';
+require 'tags.php';
+
 switch ($request[1]) {
     case 'tasks':
         $taskController = new TaskController();
@@ -32,7 +38,8 @@ switch ($request[1]) {
         http_response_code(404);
         echo json_encode(["message" => "Resource not found"]);
         break;
-}
+}
+
 function handleTaskRequest($controller, $method, $request) {
     switch ($method) {
         case 'GET':
@@ -81,4 +88,4 @@ function handleTagRequest($controller, $method, $request) {
             echo json_encode(["message" => "Method not allowed"]);
             break;
     }
-}
+}
