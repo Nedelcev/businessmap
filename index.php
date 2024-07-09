@@ -16,6 +16,27 @@
  
 header("Content-Type: application/json");
 
+function authenticate() {
+    $valid_username = 'admin';
+    $valid_password = 'password';
+
+    if (!isset($_SERVER['PHP_AUTH_USER']) || !isset($_SERVER['PHP_AUTH_PW'])) {
+        header('HTTP/1.1 401 Unauthorized');
+        header('WWW-Authenticate: Basic realm="Task Management API"');
+        echo json_encode(["message" => "Authentication required"]);
+        exit;
+    }
+
+    $username = $_SERVER['PHP_AUTH_USER'];
+    $password = $_SERVER['PHP_AUTH_PW'];
+
+    if ($username !== $valid_username || $password !== $valid_password) {
+        header('HTTP/1.1 403 Forbidden');
+        echo json_encode(["message" => "Invalid credentials"]);
+        exit;
+    }
+}
+
 $request = $_SERVER['REQUEST_URI'];
 $request = rtrim($request, '/');
 $request = explode('/', $request);
@@ -24,6 +45,8 @@ $method = $_SERVER['REQUEST_METHOD'];
 
 require 'tasks.php';
 require 'tags.php';
+
+authenticate();
 
 switch ($request[1]) {
     case 'tasks':
